@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import NavBar from "./elements/NavBar";
 
 export default function CreatePost() {
     const [data, setData] = useState({
@@ -59,6 +60,8 @@ export default function CreatePost() {
     }
 
     return (
+        <>
+        <NavBar/>
         <div className="container">
             <form onSubmit={handleSubmit}>
                 {error && <div className="alert alert-danger">{error}</div>}
@@ -104,5 +107,6 @@ export default function CreatePost() {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
         </div>
+        </>
     );
 }

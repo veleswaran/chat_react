@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
+import NavBar from "../elements/NavBar";
+import cookies from 'js-cookie'
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [data, setData] = useState({
         username: "",
         password: "",
     });
-    const [error, setError] = useState(null); // For error messages
-    const [success, setSuccess] = useState(false); // For success feedback
+    const router = useNavigate()
 
     function handleChange(e) {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -15,18 +17,17 @@ export default function Login() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-            const res = await axios.post("http://localhost:8000/auth/jwt/create/", data);
+        const res = await axios.post("http://localhost:8000/auth/jwt/create/", data);
 
-            if (res.status === 201) {
-                console.log(res.data);
-                setSuccess(true); // Indicate success
-                setData({ title: "", description: "", video: null }); // Clear form
-            }
-            console.log(res)
-       
+        if (res.status === 200) {
+            console.log(res.data);
+            cookies.set("token",res.data.access)
+            router("/")
+        }
     }
-
     return (
+        <>
+        <NavBar/>
         <div className="container mt-5">
             <h1>Login form</h1>
             <form onSubmit={handleSubmit}>
@@ -61,5 +62,6 @@ export default function Login() {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
         </div>
+        </>
     );
 }

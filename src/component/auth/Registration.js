@@ -1,14 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
+import NavBar from "../elements/NavBar";
+import { useNavigate } from "react-router-dom";
 
 export default function Registration() {
-    const [data, setData] = useState({
-        title: "",
-        description: "",
-        video: null
-    });
-    const [error, setError] = useState(null); // For error messages
-    const [success, setSuccess] = useState(false); // For success feedback
+    const [data, setData] = useState({});
+    const router = useNavigate()
 
     function handleChange(e) {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -20,17 +17,17 @@ export default function Registration() {
             const res = await axios.post("http://localhost:8000/api/user/", data);
 
             if (res.status === 201) {
-                console.log("Data added successfully");
-                setSuccess(true); // Indicate success
-                setData({ title: "", description: "", video: null }); // Clear form
+                console.log("User Register successfully");
+                router("/login") 
             }
         } catch (error) {
             console.error("Upload failed:", error);
-            setError("Failed to upload the post. Please try again.");
         }
     }
 
     return (
+        <>
+                <NavBar/>
         <div className="container mt-5">
             <h1>Registration form</h1>
             <form onSubmit={handleSubmit}>
@@ -88,5 +85,6 @@ export default function Registration() {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
         </div>
+        </>
     );
 }
